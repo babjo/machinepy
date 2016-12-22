@@ -58,7 +58,6 @@ def validate_args(input_dataset, output_dataset, learning_rate=0.1):
     for input_data in input_dataset:
         if not isinstance(input_data, list):
             raise ValueError
-
         for value in input_data:
             if not isinstance(value, numbers.Number):
                 raise ValueError
@@ -71,5 +70,43 @@ def validate_args(input_dataset, output_dataset, learning_rate=0.1):
 
 def normal_equation(input_dataset, output_dataset):
     validate_args(input_dataset, output_dataset)
+    # θ=(XT X)−1 XT y
 
-    return lambda x: x
+    # [[x, x]
+    #  [x, x]
+    #  [x, x]]
+    input_matrix = np.array(input_dataset)
+    m = input_matrix.shape[0]
+
+    # [[1]
+    #  [1]
+    #  [1]]
+    x_zeros = np.array([[1] * m]).T
+
+    # [[1, x, x]
+    #  [1, x, x]
+    #  [1, x, x]]
+    input_matrix = np.hstack((x_zeros, input_matrix))
+
+    # [[output_0],
+    #  [output_1],
+    #  [output_2],
+    #  [output_3]]
+    output_vector = np.array([output_dataset]).T
+
+    # [[theta_0],
+    #  [theta_1],
+    #  [theta_2]]
+
+    a = np.dot(input_matrix.T, input_matrix)
+    if is_singular(a):
+        raise ValueError
+
+    b = np.dot(input_matrix.T, output_vector)
+    theta_vector = np.linalg.solve(a, b)
+
+    return lambda input_x: np.dot(np.array([1] + input_x), theta_vector)
+
+
+def is_singular(target):
+    return np.linalg.det(target) == 0
