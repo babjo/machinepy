@@ -3,8 +3,7 @@ machinepy is a machine learning library.
 
 ### TODO
 - [x] Implement gradient descent
-- [ ] Implement stochastic gradient descent
 - [x] Implement normal equation
-- [ ] Feature scaling (Mean normalization)
-- [ ] Learning rate
-- [ ] Choice feature 
+- [x] Feature scaling (Mean normalization)
+- [ ] Polynomial Regression
+- [ ] Implement stochastic gradient descent
